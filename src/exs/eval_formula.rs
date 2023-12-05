@@ -6,13 +6,18 @@
 /*   By: bguyot <bguyot@student.42mulhouse.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/12/05 15:40:56 by bguyot            #+#    #+#             */
-/*   Updated: 2023/12/05 16:23:27 by bguyot           ###   ########.fr       */
+/*   Updated: 2023/12/05 17:15:11 by bguyot           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 use std::collections::VecDeque;
 
 pub fn	eval_formula(formula: &str) -> bool
+{
+	return eval_formula_opt(formula).unwrap_or(false);
+}
+
+pub fn	eval_formula_opt(formula: &str) -> Option<bool>
 {
 	let	mut	stack: VecDeque<bool> = VecDeque::new();
 	let mut	i: usize = 0;
@@ -29,7 +34,7 @@ pub fn	eval_formula(formula: &str) -> bool
 		if !bool_operators().contains(c)
 		{
 			eprintln!("Error: {} is not a valid symbol", c);
-			return false;
+			return None;
 		}
 		if c == '!'
 		{
@@ -41,7 +46,7 @@ pub fn	eval_formula(formula: &str) -> bool
 		if stack.len() < 2
 		{
 			eprintln!("Error: {} requiries 2 operands, find one", c);
-			return false;
+			return None;
 		}
 		if c == '&'
 		{
@@ -78,15 +83,15 @@ pub fn	eval_formula(formula: &str) -> bool
 	if stack.len() != 1
 	{
 		eprintln!("Error: {} is not a valid formula", formula);
-		return false;
+		return None;
 	}
 	else
 	{
-		return stack.pop_back().unwrap();
+		return Some(stack.pop_back().unwrap());
 	}
 }
 
-pub fn	bool_operators() -> &'static str
+fn	bool_operators() -> &'static str
 {
 	return "!&|^>=";
 }
