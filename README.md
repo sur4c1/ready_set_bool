@@ -19,38 +19,26 @@ You may exit the program using a EOF or the commands
 ## Workroad
 
 -   [x] ex00
-    -   [x] tests
-    -   [ ] main file (to respect the subject)
--   [x] ex01
-    -   [x] tests
-    -   [ ] main file (to respect the subject)
--   [x] ex02
-    -   [x] tests
-    -   [ ] main file (to respect the subject)
--   [ ] ex03
     -   [ ] tests
-    -   [ ] main file (to respect the subject)
+-   [x] ex01
+    -   [ ] tests
+-   [x] ex02
+    -   [ ] tests
+-   [x] ex03
+    -   [ ] tests
 -   [ ] ex04
     -   [ ] tests
-    -   [ ] main file (to respect the subject)
 -   [ ] ex05
     -   [ ] tests
-    -   [ ] main file (to respect the subject)
 -   [ ] ex06
     -   [ ] tests
-    -   [ ] main file (to respect the subject)
 -   [ ] ex07
     -   [ ] tests
-    -   [ ] main file (to respect the subject)
 -   [ ] ex08
     -   [ ] tests
-    -   [ ] main file (to respect the subject)
 -   [ ] ex09
     -   [ ] tests
-    -   [ ] main file (to respect the subject)
 -   [ ] ex10
     -   [ ] tests
-    -   [ ] main file (to respect the subject)
 -   [ ] ex11
     -   [ ] tests
-    -   [ ] main file (to respect the subject)
