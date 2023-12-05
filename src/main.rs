@@ -6,7 +6,7 @@
 /*   By: bguyot <bguyot@student.42mulhouse.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/12/05 14:56:42 by bguyot            #+#    #+#             */
-/*   Updated: 2023/12/05 15:23:41 by bguyot           ###   ########.fr       */
+/*   Updated: 2023/12/05 16:20:12 by bguyot           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -36,6 +36,10 @@ fn main() {
 		else if cmd == "02" || cmd == "2"
 		{
 			tests::ex02::ex02();
+		}
+		else if cmd == "03" || cmd == "3"
+		{
+			tests::ex03::ex03();
 		}
 		else if cmd == "Q" || cmd == "q" || cmd == "quit" || cmd == "exit"
 		{
