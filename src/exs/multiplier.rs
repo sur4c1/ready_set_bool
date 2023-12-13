@@ -12,14 +12,11 @@
 
 use crate::exs::adder::adder;
 
-pub fn	multiplier(mut a: u32, mut b: u32) -> u32
-{
-	let mut	res = 0;
+pub fn multiplier(mut a: u32, mut b: u32) -> u32 {
+	let mut res = 0;
 
-	while b != 0
-	{
-		if b & 1 != 0
-		{
+	while b != 0 {
+		if b & 1 != 0 {
 			res = adder(res, a);
 		}
 		b >>= 1;

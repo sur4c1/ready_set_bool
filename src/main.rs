@@ -13,45 +13,31 @@
 use std::io;
 use std::io::Write;
 
-mod	tests;
-mod	exs;
+mod exs;
+mod tests;
 
 fn main() {
 	let mut lines = io::stdin().lines();
 
 	println!("Hi!");
 	show_prompt();
-	while let Some(line) = lines.next()
-	{
+	while let Some(line) = lines.next() {
 		let cmd = line.unwrap();
 
-		if cmd == "00" || cmd == "0"
-		{
+		if cmd == "00" || cmd == "0" {
 			tests::ex00::ex00();
-		}
-		else if cmd == "01" || cmd == "1"
-		{
+		} else if cmd == "01" || cmd == "1" {
 			tests::ex01::ex01();
-		}
-		else if cmd == "02" || cmd == "2"
-		{
+		} else if cmd == "02" || cmd == "2" {
 			tests::ex02::ex02();
-		}
-		else if cmd == "03" || cmd == "3"
-		{
+		} else if cmd == "03" || cmd == "3" {
 			tests::ex03::ex03();
-		}
-		else if cmd == "04" || cmd == "4"
-		{
+		} else if cmd == "04" || cmd == "4" {
 			tests::ex04::ex04();
-		}
-		else if cmd == "Q" || cmd == "q" || cmd == "quit" || cmd == "exit"
-		{
+		} else if cmd == "Q" || cmd == "q" || cmd == "quit" || cmd == "exit" {
 			println!("Exiting...");
 			break;
-		}
-		else
-		{
+		} else {
 			println!("Bad input");
 		}
 		show_prompt();
@@ -59,8 +45,7 @@ fn main() {
 	println!("Bye!");
 }
 
-fn show_prompt()
-{
+fn show_prompt() {
 	println!("\nChoisir exercice à tester: (00-11)");
 	print!("> ");
 	io::stdout().flush().unwrap();

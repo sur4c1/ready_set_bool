@@ -10,10 +10,9 @@
 /*                                                                            */
 /* ************************************************************************** */
 
-use	crate::exs::eval_formula::eval_formula;
+use crate::exs::eval_formula::eval_formula;
 
-pub fn ex03()
-{
+pub fn ex03() {
 	let formula = "10&";
 	println!("{} evaluate to {}", formula, eval_formula(formula));
 	let formula = "10|";

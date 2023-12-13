@@ -10,10 +10,9 @@
 /*                                                                            */
 /* ************************************************************************** */
 
-use	crate::exs::gray_code::gray_code;
+use crate::exs::gray_code::gray_code;
 
-pub fn	ex02()
-{
+pub fn ex02() {
 	println!("grey_code(0) = {} (should be 0)", gray_code(0));
 	println!("grey_code(1) = {} (should be 1)", gray_code(1));
 	println!("grey_code(2) = {} (should be 3)", gray_code(2));

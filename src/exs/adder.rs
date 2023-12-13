@@ -10,12 +10,10 @@
 /*                                                                            */
 /* ************************************************************************** */
 
-pub fn	adder(mut a: u32, mut b: u32) -> u32
-{
+pub fn adder(mut a: u32, mut b: u32) -> u32 {
 	let mut carry: u32;
 
-	while b != 0
-	{
+	while b != 0 {
 		carry = a & b;
 		a ^= b;
 		b = carry << 1;
