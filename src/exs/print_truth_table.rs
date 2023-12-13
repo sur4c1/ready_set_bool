@@ -6,85 +6,114 @@
 /*   By: bguyot <bguyot@student.42mulhouse.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/12/05 16:33:52 by bguyot            #+#    #+#             */
-/*   Updated: 2023/12/05 18:08:01 by bguyot           ###   ########.fr       */
+/*   Updated: 2023/12/13 11:18:20 by bguyot           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-use	crate::exs::eval_formula::eval_formula_opt;
-use	std::collections::HashMap;
+use crate::exs::eval_formula::eval_formula_opt;
+use std::collections::HashSet;
+use std::vec::Vec;
 
-pub fn	print_truth_table(formula: &str)
-{
-	let mut	i: u32 = 0;
-	let mut nb_var: u32 = 0;
-	let mut var_indexes: HashMap<String, usize> = HashMap::new();
+struct Variable {
+	name: char,
+	mask: u32,
+}
 
-	for c in formula.chars()
+pub fn print_truth_table(formula: &str) {
+	let variables = find_variables(formula);
+	let mut test = 0;
+
+	if variables.len() == 0
 	{
-		if c.is_ascii_uppercase()
+		let res = eval_formula_opt(formula);
+		if res.is_some()
 		{
-			if !var_indexes.contains_key(c.to_string())
-			{
-				var_indexes.insert(c.to_string(), var_indexes.len());
-			}
-		}
-	}
-	if var_indexes.len() == 0
-	{
-		let ret = eval_formula_opt(formula);
-		if ret.is_some()
-		{
-			println!("Constant formula, evaluate to {}", ret.unwrap());
+			println!("The formula {} is constant and evaluate to {}.", formula, res.unwrap());
 		}
 		return;
 	}
-	i = 0;
+	// Draw first line
 	print!("|");
-	for (key, val) in var_indexes
+	for v in &variables
 	{
-		print!(" {} |", key);
+		print!(" {} |", v.name);
 	}
 	println!(" = |");
+	// Draw separator line
 	print!("|");
-	for (key, val) in var_indexes
+	for _v in &variables
 	{
 		print!("---|");
 	}
 	println!("---|");
-	while i < 1<<var_indexes.len()
+	// Draw each line
+	while test < 1 << variables.len()
 	{
+		let	test_formula = get_test_form(formula, &variables, test);
+		let res = eval_formula_opt(&test_formula);
+		if res.is_none()
+		{
+			eprintln!("print_truth_table: Formula {} lead to an error with test #{} ({})",
+				formula, test, test_formula);
+			return;
+		}
+
+		let res_char = if res.unwrap() == true {"1"} else {"0"};
+
 		print!("|");
-		for (key, val) in var_indexes
+		for v in &variables
 		{
-			print!(" {} |", key);
+			print!(" {} |", if (v.mask & test) == 0 {"0"} else {"1"});
 		}
-		let ret = execute_formula(formula, &var_indexes, i);
-		if ret.is_none()
-		{
-			println!(" ! |");
-		}
-		else if ret.unwrap()
-		{
-			println!(" 1 |");
-		}
-		else
-		{
-			println!(" 0 |");
-		}
+		println!(" {} |", res_char);
+		test += 1;
 	}
 }
 
-fn	execute_formula(
-	formula: &str,
-	var_indexes: &HashMap<String, usize>,
-	values: u32
-) -> Option<bool>
-{
-	let mut moded_formula = formula;
-	for (key, val) in var_indexes
-	{
-		let char_to_put = if (values >> val & 1) == 1 {"1"} else {"0"};
-		moded_formula = &moded_formula.replace(key, char_to_put);
+fn find_variables(formula: &str) -> Vec<Variable> {
+	let mut	var_names: HashSet<char> = HashSet::new();
+	let mut	ret: Vec<Variable> = Vec::new();
+	let mut	mask;
+
+	for c in formula.chars() {
+		if c.is_ascii_uppercase() {
+			var_names.insert(c);
+		}
 	}
-	return eval_formula_opt(moded_formula);
+
+	if var_names.len() == 0
+	{
+		return ret;
+	}
+
+	mask = 1 << (var_names.len() - 1);
+	for c in "ABCDEFGHIJKLMNOPQRSTUVWXYZ".chars()
+	{
+		if var_names.contains(&c)
+		{
+			let	elem = Variable {
+				name: c,
+				mask: mask,
+			};
+			ret.push(elem);
+			mask >>= 1;
+		}
+	}
+
+	return ret;
+}
+
+fn	get_test_form<'a>(formula: &'a str, variables: &Vec<Variable>, test: u32) -> String
+{
+	let mut	tmp = formula.to_string();
+
+	for v in variables
+	{
+		tmp = tmp.replace(
+			v.name.to_string().as_str(),
+			if (v.mask & test) == 0 {"0"} else {"1"}
+		);
+	}
+
+	return tmp;
 }
