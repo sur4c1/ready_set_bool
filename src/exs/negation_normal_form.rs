@@ -6,20 +6,20 @@
 /*   By: bguyot <bguyot@student.42mulhouse.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/12/14 11:25:46 by bguyot            #+#    #+#             */
-/*   Updated: 2023/12/21 16:54:59 by bguyot           ###   ########.fr       */
+/*   Updated: 2023/12/21 18:02:10 by bguyot           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-struct	EquationTree
+pub struct	EquationTree
 {
-	left: Option<Box<EquationTree>>,
-	right: Option<Box<EquationTree>>,
-	value: String,
+	pub left: Option<Box<EquationTree>>,
+	pub right: Option<Box<EquationTree>>,
+	pub value: String,
 }
 
 impl EquationTree {
 	// Constructor to create a new EquationTree with a given value
-	fn new(value: String) -> Self {
+	pub fn new(value: String) -> Self {
 		EquationTree {
 			value,
 			left: None,
@@ -28,17 +28,17 @@ impl EquationTree {
 	}
 
 	// Function to set the left child by taking ownership of another EquationTree
-	fn set_left(&mut self, new_left: Option<Box<EquationTree>>) {
+	pub fn set_left(&mut self, new_left: Option<Box<EquationTree>>) {
 		self.left = new_left;
 	}
 
 	// Function to set the right child by taking ownership of another EquationTree
-	fn set_right(&mut self, new_right: Option<Box<EquationTree>>) {
+	pub fn set_right(&mut self, new_right: Option<Box<EquationTree>>) {
 		self.right = new_right;
 	}
 
 	// Clone the EquationTree
-	fn clone(&self) -> Self {
+	pub fn clone(&self) -> Self {
 		EquationTree {
 			value: self.value.clone(),
 			left: match &self.left {
@@ -53,13 +53,8 @@ impl EquationTree {
 	}
 }
 
-pub fn	negation_normal_form(formula: &str) -> String
-{
-	let mut tree = parse_tree(formula);
-	if tree.is_none() {
-		return String::from("Error: Invalid formula");
-	}
-	while let Some(illegal) = find_illegal(&mut tree)
+pub fn	nnf_tree(tree: &mut Option<Box<EquationTree>>) {
+	while let Some(illegal) = find_illegal(tree)
 	{
 		// XOR (a ^ b) = (a | b) & (!a & !b) NOTE: using the CNF directly
 		if illegal.value == "^"
@@ -196,11 +191,21 @@ pub fn	negation_normal_form(formula: &str) -> String
 			}
 		}
 	}
+}
+
+pub fn	negation_normal_form(formula: &str) -> String
+{
+	let mut tree = parse_tree(formula);
+	if tree.is_none() {
+		eprintln!("Error: Invalid formula");
+		return String::from("INVALID FORMULA");
+	}
+	nnf_tree(&mut tree);
 	return tree_to_string(&tree.unwrap());
 }
 
 
-fn tree_to_string(tree: &Box<EquationTree>) -> String {
+pub fn tree_to_string(tree: &Box<EquationTree>) -> String {
 	if tree.left.is_none() && tree.right.is_none() {
 		return tree.value.clone();
 	} else if tree.left.is_some() && tree.right.is_none() {
@@ -215,7 +220,7 @@ fn tree_to_string(tree: &Box<EquationTree>) -> String {
 	}
 }
 
-fn parse_tree(formula: &str) -> Option<Box<EquationTree>> {
+pub fn parse_tree(formula: &str) -> Option<Box<EquationTree>> {
 	let mut stack: Vec<Option<Box<EquationTree>>> = Vec::new();
 	for c in formula.chars()
 	{
