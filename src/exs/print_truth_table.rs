@@ -6,7 +6,7 @@
 /*   By: bguyot <bguyot@student.42mulhouse.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/12/05 16:33:52 by bguyot            #+#    #+#             */
-/*   Updated: 2023/12/13 11:18:20 by bguyot           ###   ########.fr       */
+/*   Updated: 2023/12/22 17:44:33 by bguyot           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,9 +14,9 @@ use crate::exs::eval_formula::eval_formula_opt;
 use std::collections::HashSet;
 use std::vec::Vec;
 
-struct Variable {
-	name: char,
-	mask: u32,
+pub struct Variable {
+	pub name: char,
+	pub mask: u32,
 }
 
 pub fn print_truth_table(formula: &str) {
@@ -69,7 +69,7 @@ pub fn print_truth_table(formula: &str) {
 	}
 }
 
-fn find_variables(formula: &str) -> Vec<Variable> {
+pub fn find_variables(formula: &str) -> Vec<Variable> {
 	let mut var_names: HashSet<char> = HashSet::new();
 	let mut ret: Vec<Variable> = Vec::new();
 	let mut mask;
@@ -99,7 +99,7 @@ fn find_variables(formula: &str) -> Vec<Variable> {
 	return ret;
 }
 
-fn get_test_form<'a>(formula: &'a str, variables: &Vec<Variable>, test: u32) -> String {
+pub fn get_test_form<'a>(formula: &'a str, variables: &Vec<Variable>, test: u32) -> String {
 	let mut tmp = formula.to_string();
 
 	for v in variables {
