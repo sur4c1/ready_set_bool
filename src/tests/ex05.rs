@@ -12,20 +12,47 @@
 
 use crate::exs::negation_normal_form::negation_normal_form;
 
-pub fn	ex05()
-{
+pub fn ex05() {
 	let formula = "AB|!";
-	println!("The NNF of {} is {}", formula, negation_normal_form(formula));
+	println!(
+		"The NNF of {} is {}",
+		formula,
+		negation_normal_form(formula)
+	);
 	let formula = "AB&!";
-	println!("The NNF of {} is {}", formula, negation_normal_form(formula));
+	println!(
+		"The NNF of {} is {}",
+		formula,
+		negation_normal_form(formula)
+	);
 	let formula = "AB>";
-	println!("The NNF of {} is {}", formula, negation_normal_form(formula));
+	println!(
+		"The NNF of {} is {}",
+		formula,
+		negation_normal_form(formula)
+	);
 	let formula = "AB^";
-	println!("The NNF of {} is {}", formula, negation_normal_form(formula));
+	println!(
+		"The NNF of {} is {}",
+		formula,
+		negation_normal_form(formula)
+	);
 	let formula = "A";
-	println!("The NNF of {} is {}", formula, negation_normal_form(formula));
+	println!(
+		"The NNF of {} is {}",
+		formula,
+		negation_normal_form(formula)
+	);
 	let formula = "A!!";
-	println!("The NNF of {} is {}", formula, negation_normal_form(formula));
+	println!(
+		"The NNF of {} is {}",
+		formula,
+		negation_normal_form(formula)
+	);
 	let formula = "AB|C&!";
-	println!("The NNF of {} is {}", formula, negation_normal_form(formula));
+	println!(
+		"The NNF of {} is {}",
+		formula,
+		negation_normal_form(formula)
+	);
 }

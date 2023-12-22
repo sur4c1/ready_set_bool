@@ -12,21 +12,47 @@
 
 use crate::exs::conjunction_normal_form::conjunction_normal_form;
 
-pub fn ex06()
-{
+pub fn ex06() {
 	let formula = "AB&!";
-	println!("The CNF form of {} is {}", formula, conjunction_normal_form(formula));
-		let formula = "AB|!";
-	println!("The CNF form of {} is {}", formula, conjunction_normal_form(formula));
+	println!(
+		"The CNF form of {} is {}",
+		formula,
+		conjunction_normal_form(formula)
+	);
+	let formula = "AB|!";
+	println!(
+		"The CNF form of {} is {}",
+		formula,
+		conjunction_normal_form(formula)
+	);
 	let formula = "AB|C&";
-	println!("The CNF form of {} is {}", formula, conjunction_normal_form(formula));
+	println!(
+		"The CNF form of {} is {}",
+		formula,
+		conjunction_normal_form(formula)
+	);
 	let formula = "AB|C|D|";
-	println!("The CNF form of {} is {}", formula, conjunction_normal_form(formula));
+	println!(
+		"The CNF form of {} is {}",
+		formula,
+		conjunction_normal_form(formula)
+	);
 	let formula = "AB&C&D&";
-	println!("The CNF form of {} is {}", formula, conjunction_normal_form(formula));
+	println!(
+		"The CNF form of {} is {}",
+		formula,
+		conjunction_normal_form(formula)
+	);
 	let formula = "AB&!C!|";
-	println!("The CNF form of {} is {}", formula, conjunction_normal_form(formula));
+	println!(
+		"The CNF form of {} is {}",
+		formula,
+		conjunction_normal_form(formula)
+	);
 	let formula = "AB|!C!&";
-	println!("The CNF form of {} is {}", formula, conjunction_normal_form(formula));
-
+	println!(
+		"The CNF form of {} is {}",
+		formula,
+		conjunction_normal_form(formula)
+	);
 }

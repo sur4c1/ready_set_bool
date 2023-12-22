@@ -10,8 +10,7 @@
 /*                                                                            */
 /* ************************************************************************** */
 
-pub struct	EquationTree
-{
+pub struct EquationTree {
 	pub left: Option<Box<EquationTree>>,
 	pub right: Option<Box<EquationTree>>,
 	pub value: String,
@@ -53,15 +52,11 @@ impl EquationTree {
 	}
 }
 
-pub fn	nnf_tree(tree: &mut Option<Box<EquationTree>>) {
-	while let Some(illegal) = find_illegal(tree)
-	{
+pub fn nnf_tree(tree: &mut Option<Box<EquationTree>>) {
+	while let Some(illegal) = find_illegal(tree) {
 		// XOR (a ^ b) = (a | b) & (!a & !b) NOTE: using the CNF directly
-		if illegal.value == "^"
-		{
-			if let (Some(left), Some(right))
-				= (&illegal.left, &illegal.right)
-			{
+		if illegal.value == "^" {
+			if let (Some(left), Some(right)) = (&illegal.left, &illegal.right) {
 				let mut not_left = EquationTree::new("!".to_string());
 				not_left.set_left(Some(Box::new((*left).clone())));
 
@@ -82,11 +77,8 @@ pub fn	nnf_tree(tree: &mut Option<Box<EquationTree>>) {
 			}
 		}
 		// IMPLIES (a > b) = (!a | b)
-		else if illegal.value == ">"
-		{
-			if let (Some(left), Some(right))
-				= (&illegal.left, &illegal.right)
-			{
+		else if illegal.value == ">" {
+			if let (Some(left), Some(right)) = (&illegal.left, &illegal.right) {
 				let mut not_left = EquationTree::new("!".to_string());
 				not_left.set_left(Some(Box::new((*left).clone())));
 
@@ -96,11 +88,8 @@ pub fn	nnf_tree(tree: &mut Option<Box<EquationTree>>) {
 			}
 		}
 		// EQUIVALENCE (a = b) = (a & b) | (!a & !b)
-		else if illegal.value == "="
-		{
-			if let (Some(left), Some(right))
-				= (&illegal.left, &illegal.right)
-			{
+		else if illegal.value == "=" {
+			if let (Some(left), Some(right)) = (&illegal.left, &illegal.right) {
 				let mut not_left = EquationTree::new("!".to_string());
 				not_left.set_left(Some(Box::new((*left).clone())));
 
@@ -121,33 +110,21 @@ pub fn	nnf_tree(tree: &mut Option<Box<EquationTree>>) {
 			}
 		}
 		// NOT
-		else if illegal.value == "!"
-		{
-			if let Some(next) = &illegal.left
-			{
+		else if illegal.value == "!" {
+			if let Some(next) = &illegal.left {
 				// NOT
-				if next.value == "!"
-				{
-					if let Some(next_next) = &next.left
-					{
-						let (next_next_left,
-							next_next_right)
-							= (&next_next.left, &next_next.right);
+				if next.value == "!" {
+					if let Some(next_next) = &next.left {
+						let (next_next_left, next_next_right) = (&next_next.left, &next_next.right);
 						illegal.value = next_next.value.clone();
-						let new_left = if next_next_left.is_some()
-						{
+						let new_left = if next_next_left.is_some() {
 							Some(Box::new((*next_next_left.as_ref().unwrap()).clone()))
-						}
-						else
-						{
+						} else {
 							None
 						};
-						let new_right = if next_next_right.is_some()
-						{
+						let new_right = if next_next_right.is_some() {
 							Some(Box::new((*next_next_right.as_ref().unwrap()).clone()))
-						}
-						else
-						{
+						} else {
 							None
 						};
 						illegal.set_left(new_left);
@@ -155,11 +132,8 @@ pub fn	nnf_tree(tree: &mut Option<Box<EquationTree>>) {
 					}
 				}
 				// AND
-				else if next.value == "&"
-				{
-					if let (Some(next_left), Some(next_right))
-						= (&next.left, &next.right)
-					{
+				else if next.value == "&" {
+					if let (Some(next_left), Some(next_right)) = (&next.left, &next.right) {
 						let mut not_left = EquationTree::new("!".to_string());
 						not_left.set_left(Some(Box::new((*next_left).clone())));
 
@@ -172,11 +146,8 @@ pub fn	nnf_tree(tree: &mut Option<Box<EquationTree>>) {
 					}
 				}
 				// OR
-				else if next.value == "|"
-				{
-					if let (Some(next_left), Some(next_right))
-						= (&next.left, &next.right)
-					{
+				else if next.value == "|" {
+					if let (Some(next_left), Some(next_right)) = (&next.left, &next.right) {
 						let mut not_left = EquationTree::new("!".to_string());
 						not_left.set_left(Some(Box::new((*next_left).clone())));
 
@@ -193,8 +164,7 @@ pub fn	nnf_tree(tree: &mut Option<Box<EquationTree>>) {
 	}
 }
 
-pub fn	negation_normal_form(formula: &str) -> String
-{
+pub fn negation_normal_form(formula: &str) -> String {
 	let mut tree = parse_tree(formula);
 	if tree.is_none() {
 		eprintln!("Error: Invalid formula");
@@ -203,7 +173,6 @@ pub fn	negation_normal_form(formula: &str) -> String
 	nnf_tree(&mut tree);
 	return tree_to_string(&tree.unwrap());
 }
-
 
 pub fn tree_to_string(tree: &Box<EquationTree>) -> String {
 	if tree.left.is_none() && tree.right.is_none() {
@@ -222,62 +191,47 @@ pub fn tree_to_string(tree: &Box<EquationTree>) -> String {
 
 pub fn parse_tree(formula: &str) -> Option<Box<EquationTree>> {
 	let mut stack: Vec<Option<Box<EquationTree>>> = Vec::new();
-	for c in formula.chars()
-	{
-		if c.is_ascii_uppercase()
-		{
+	for c in formula.chars() {
+		if c.is_ascii_uppercase() {
 			stack.push(Some(Box::new(EquationTree::new(c.to_string()))));
-		}
-		else if c == '!'
-		{
+		} else if c == '!' {
 			let left = stack.pop();
-			if left.is_none()
-			{
+			if left.is_none() {
 				return None;
 			}
 			let mut tree = EquationTree::new(c.to_string());
 			tree.set_left(left.unwrap());
 			stack.push(Some(Box::new(tree)));
-		}
-		else if c == '&' || c == '|' || c == '>' || c == '=' || c == '^'
-		{
+		} else if c == '&' || c == '|' || c == '>' || c == '=' || c == '^' {
 			let right = stack.pop();
 			let left = stack.pop();
-			if left.is_none() || right.is_none()
-			{
+			if left.is_none() || right.is_none() {
 				return None;
 			}
 			let mut tree = EquationTree::new(c.to_string());
 			tree.set_left(left.unwrap());
 			tree.set_right(right.unwrap());
 			stack.push(Some(Box::new(tree)));
-		}
-		else
-		{
+		} else {
 			return None;
 		}
 	}
-	if stack.len() != 1
-	{
+	if stack.len() != 1 {
 		return None;
 	}
 	return stack.pop().unwrap();
 }
 
-fn find_illegal<'a>(
-	tree: &'a mut Option<Box<EquationTree>>
-) -> Option<&'a mut Box<EquationTree>> {
+fn find_illegal<'a>(tree: &'a mut Option<Box<EquationTree>>) -> Option<&'a mut Box<EquationTree>> {
 	if let Some(tree_ref) = tree.as_mut() {
 		// Check if the current node is illegal
 		if tree_ref.value == "^"
 			|| tree_ref.value == "="
-			|| tree_ref.value == ">" || (
-				tree_ref.value == "!"
+			|| tree_ref.value == ">"
+			|| (tree_ref.value == "!"
 				&& (tree_ref.left.as_ref().unwrap().value == "&"
 					|| tree_ref.left.as_ref().unwrap().value == "|"
-					|| tree_ref.left.as_ref().unwrap().value == "!"
-				)
-			)
+					|| tree_ref.left.as_ref().unwrap().value == "!"))
 		{
 			return Some(tree_ref);
 		}

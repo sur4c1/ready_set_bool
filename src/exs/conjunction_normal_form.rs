@@ -6,20 +6,18 @@
 /*   By: bguyot <bguyot@student.42mulhouse.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/12/21 17:40:00 by bguyot            #+#    #+#             */
-/*   Updated: 2023/12/21 18:18:03 by bguyot           ###   ########.fr       */
+/*   Updated: 2023/12/22 17:40:45 by bguyot           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-use crate::exs::negation_normal_form::EquationTree;
 use crate::exs::negation_normal_form::nnf_tree;
 use crate::exs::negation_normal_form::parse_tree;
 use crate::exs::negation_normal_form::tree_to_string;
+use crate::exs::negation_normal_form::EquationTree;
 
-pub fn conjunction_normal_form(formula: &str) -> String
-{
+pub fn conjunction_normal_form(formula: &str) -> String {
 	let mut tree = parse_tree(formula);
-	if tree.is_none()
-	{
+	if tree.is_none() {
 		eprintln!("Error: Invalid formula");
 		return "INVALID FORMULA".to_string();
 	}
@@ -28,75 +26,62 @@ pub fn conjunction_normal_form(formula: &str) -> String
 	return tree_to_string(&tree.unwrap());
 }
 
-pub fn cnf_tree(tree: &mut Option<Box<EquationTree>>)
-{
-	// ABC&| -> A|B & A|C (distribute the & over the |)
+pub fn cnf_tree(tree: &mut Option<Box<EquationTree>>) {
+	while let Some(illegal) = find_illegal(tree) {
+		let left = illegal.left.take();
+		let right = illegal.right.take();
 
-	// Commutativity of | and &
-	// AB|C| -> ABC|| (commutativity of |)
-	// AB&C& -> ABC&& (commutativity of &)
-		// NOTE: If only one children is a | or &, then we make sure it's the right one
-	while let Some(illegal) = find_illegal(tree)
-	{
-		if illegal.value == "|"
-		{
-			let left = *illegal.left.take().unwrap();
-			let right = *illegal.right.take().unwrap();
+		if left.is_none() || right.is_none() {
+			eprintln!("Error: Unexpected empty children");
+			return;
+		}
+		let left = left.unwrap();
+		let mut right = right.unwrap();
 
-			if left.value == "&" || left.value == "|"
-			{
-				// Swap the left and right children
-				// NOTE: I can do this bc | is commutative
-				// NOTE: Might not be necessary, but still doing it every time
-				illegal.set_left(Some(Box::new(right.clone())));
-				illegal.set_right(Some(Box::new(left.clone())));
-			}
-			{
-				// Swap the left and right children
-				// NOTE: I can do this bc | is commutative
-				illegal.set_left(Some(Box::new(right.clone())));
-				illegal.set_right(Some(Box::new(left.clone())));
-			}
-			// Distribute the A | (B & C) into (A | B) & (A | C)
-			let a: EquationTree = *illegal.left.take().unwrap();
-			let mut right = *illegal.right.take().unwrap();
-			let b = *right.left.take().unwrap();
-			let c = *right.right.take().unwrap();
+		// If left child is a operator and right child is not
+		if (left.value == "&" || left.value == "|") && !(right.value == "&" || right.value == "|") {
+			let new_left = Some(Box::new((*right).clone()));
+			let new_right = Some(Box::new((*left).clone()));
+			// Swap left and right
+			illegal.set_left(new_left);
+			illegal.set_right(new_right);
+			continue;
+		}
 
+		// If disjunction contains a conjunction
+		// A | (B & C) => (A | B) & (A | C)
+		if illegal.value == "|" && right.value == "&" {
 			let mut new_left = EquationTree::new("|".to_string());
 			let mut new_right = EquationTree::new("|".to_string());
-			new_left.set_left(Some(Box::new(a.clone())));
-			new_left.set_right(Some(Box::new(b.clone())));
-			new_right.set_left(Some(Box::new(a.clone())));
-			new_right.set_right(Some(Box::new(c.clone())));
+			let b = right.left.take();
+			let c = right.right.take();
+
+			new_left.set_left(Some(Box::new((*left).clone())));
+			new_left.set_right(b);
+			new_right.set_left(Some(Box::new((*left).clone())));
+			new_right.set_right(c);
+
+			illegal.value = "&".to_string();
 			illegal.set_left(Some(Box::new(new_left)));
 			illegal.set_right(Some(Box::new(new_right)));
-			illegal.value = "&".to_string();
-		}
-		else if  illegal.value == "&"
-		{
-			let left = *illegal.left.take().unwrap();
-			let right = *illegal.right.take().unwrap();
-
-			if left.value == "&" || left.value == "|"
-			{
-				// Swap the left and right children
-				// NOTE: I can do this bc | is commutative
-				// NOTE: Might not be necessary, but still doing it every time
-				illegal.set_left(Some(Box::new(right.clone())));
-				illegal.set_right(Some(Box::new(left.clone())));
-			}
 		}
 	}
 }
 
-fn find_illegal<'a>(
-	tree: &'a mut Option<Box<EquationTree>>
-) -> Option<&'a mut Box<EquationTree>> {
+fn find_illegal<'a>(tree: &'a mut Option<Box<EquationTree>>) -> Option<&'a mut Box<EquationTree>> {
 	if let Some(node) = tree {
+		// If the left child is an operator and the right child is not
+		if (node.value == "&" || node.value == "|")
+			&& (node.left.as_ref().unwrap().value == "&"
+				|| node.left.as_ref().unwrap().value == "|")
+			&& !(node.right.as_ref().unwrap().value == "&"
+				|| node.right.as_ref().unwrap().value == "|")
+		{
+			return Some(node);
+		}
+		// If disjunction contains a conjunction
 		if node.value == "|"
-			&& (
-				node.left.as_ref().unwrap().value == "&"
+			&& (node.left.as_ref().unwrap().value == "&"
 				|| node.right.as_ref().unwrap().value == "&")
 		{
 			return Some(node);
@@ -108,6 +93,7 @@ fn find_illegal<'a>(
 			return Some(illegal);
 		}
 		return None;
+	} else {
+		return None;
 	}
-	else { return None; }
 }
