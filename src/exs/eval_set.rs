@@ -6,13 +6,12 @@
 /*   By: bguyot <bguyot@student.42mulhouse.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/12/27 11:13:07 by bguyot            #+#    #+#             */
-/*   Updated: 2023/12/27 11:28:39 by bguyot           ###   ########.fr       */
+/*   Updated: 2023/12/27 11:38:47 by bguyot           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 pub fn eval_set(formula: &str, sets: Vec<Vec<i32>>) -> Vec<i32>
 {
-	let mut res = Vec::new();
 	let mut stack = Vec::new();
 	let mut omega = Vec::new();
 
@@ -37,7 +36,7 @@ pub fn eval_set(formula: &str, sets: Vec<Vec<i32>>) -> Vec<i32>
 			if index >= sets.len()
 			{
 				eprintln!("eval_set: set {} not found", c);
-				return res;
+				return vec![];
 			}
 			stack.push(sets[index].clone());
 		}
@@ -47,7 +46,7 @@ pub fn eval_set(formula: &str, sets: Vec<Vec<i32>>) -> Vec<i32>
 			if temp.is_none()
 			{
 				eprintln!("eval_set: invalid formula");
-				return res;
+				return vec![];
 			}
 			let temp = temp.unwrap();
 			let mut inversed = Vec::new();
@@ -67,7 +66,7 @@ pub fn eval_set(formula: &str, sets: Vec<Vec<i32>>) -> Vec<i32>
 			if left.is_none() || right.is_none()
 			{
 				eprintln!("eval_set: invalid formula: {} is missing an operand", c);
-				return res;
+				return vec![];
 			}
 			let right = right.unwrap();
 			let left = left.unwrap();
@@ -130,7 +129,15 @@ pub fn eval_set(formula: &str, sets: Vec<Vec<i32>>) -> Vec<i32>
 					}
 				}
 			}
+			stack.push(new_set);
 		}
 	}
-	return res;
+
+	if stack.len() != 1
+	{
+		eprintln!("eval_set: invalid formula");
+		return vec![];
+	}
+
+	return stack.pop().unwrap();
 }
