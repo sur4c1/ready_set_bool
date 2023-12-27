@@ -9,3 +9,4 @@ pub mod sat;
 pub mod powerset;
 pub mod eval_set;
 pub mod map;
+pub mod reverse_map;
