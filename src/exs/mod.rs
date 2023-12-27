@@ -8,3 +8,4 @@ pub mod print_truth_table;
 pub mod sat;
 pub mod powerset;
 pub mod eval_set;
+pub mod map;
