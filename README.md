@@ -16,29 +16,49 @@ You may exit the program using a EOF or the commands
 -   `quit`
 -   `exit`
 
+### Module
+
+You can use the directory `src/exs` as a module containing all
+the public functions of that project :
+
+-   `fn adder(a: u32, b: u32) -> u32`
+-   `fn multiplier(a: u32, b: u32) -> u32`
+-   `fn gray_code(n: u32) -> u32`
+-   `fn eval_formula(formula: &str) -> bool`
+-   `fn eval_formula_opt(formula: &str) -> Option<bool>`
+    (the same as above, but returns None() in case of error)
+-   `fn print_truth_table(formula: &str)`
+-   `fn negation_normal_form(formula: &str) -> String`
+-   `fn conjunctive_normal_form(formula: &str) -> String`
+-   `fn sat(formula: &str) -> bool`
+-   `fn powerset(set: Vec<i32>) -> Vec<Vec<i32>>`
+-   `fn eval_set(formula: &str, sets: Vec<Vec<i32>>) -> Vec<i32>`
+-   `fn map(x: u16, y: u16) -> f64`
+-   `fn reverse_map(n: f64) -> (u16, u16)`
+
 ## Workroad
 
 -   [x] ex00
-    -   [ ] tests
+    -   [x] tests
 -   [x] ex01
-    -   [ ] tests
+    -   [x] tests
 -   [x] ex02
-    -   [ ] tests
+    -   [x] tests
 -   [x] ex03
-    -   [ ] tests
--   [ ] ex04
-    -   [ ] tests
--   [ ] ex05
-    -   [ ] tests
--   [ ] ex06
-    -   [ ] tests
--   [ ] ex07
-    -   [ ] tests
--   [ ] ex08
-    -   [ ] tests
--   [ ] ex09
-    -   [ ] tests
--   [ ] ex10
-    -   [ ] tests
--   [ ] ex11
-    -   [ ] tests
+    -   [x] tests
+-   [x] ex04
+    -   [x] tests
+-   [x] ex05
+    -   [x] tests
+-   [x] ex06
+    -   [x] tests
+-   [x] ex07
+    -   [x] tests
+-   [x] ex08
+    -   [x] tests
+-   [x] ex09
+    -   [x] tests
+-   [x] ex10
+    -   [x] tests
+-   [x] ex11
+    -   [x] tests
