@@ -6,3 +6,4 @@ pub mod multiplier;
 pub mod negation_normal_form;
 pub mod print_truth_table;
 pub mod sat;
+pub mod powerset;
